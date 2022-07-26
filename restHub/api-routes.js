@@ -1,7 +1,10 @@
+//api-routes.js
+
 //import express routes
 const express = require('express')
 const router = express.Router()
 
+//set default api respone
 router.get('/',(req,res)=> {
     res.json({
         status : "API its working",
@@ -9,19 +12,19 @@ router.get('/',(req,res)=> {
     })
 })
 
-//Request CREATE
-router.post('/',(req,res)=> {
-    res.send('Request Create masuk')
-})
+//import contact controller 
+const contactController = require('./contactController')
 
-//Request UPDATE
-router.put('/',(req,res)=> {
-    res.send('Request Update masuk')
-})
+//Contact Routes 
+router.route('/contacts') 
+.get(contactController.index)
+.post(contactController.new)
 
-//Request DELETE
-router.delete('/',(req,res)=> {
-    res.send('Request Delete masuk')
-})
+router.route('contacs/:contact_id')
+.get(contactController.view)
+.patch(contactController.update)
+.put(contactController.update)
+.delete(contactController.delete)
 
+//export API routes
 module.exports = router
