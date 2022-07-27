@@ -12,14 +12,14 @@ const ContactSchema = mongoose.Schema({
     },
     email : {
         type : String,
-        required : true ,
-        create_date : {
-            type : Date,
-            default : Date.now
-        }
+        required : true 
     },
     phone : {
-
+        type : String
+    },
+    create_date : {
+        type : Date,
+        default : Date.now
     }
 })
 
