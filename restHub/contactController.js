@@ -51,7 +51,7 @@ exports.view = function(req,res){
          if(err){
             res.json({
                 status : "error",
-                message : err
+                message : "ID not found"
             })
         }
         res.json({
@@ -67,26 +67,28 @@ Contact.findById(req.params.contact_id, function(err,contact){
          if(err){
             res.json({
                 status : "error",
-                message : err
+                message : "ID not Found"
             })
         }
-        contact.name = req.body.name ? req.body.name : contact.name 
+        contact.name = req.body.name
         contact.gender = req.body.gender
         contact.email = req.body.email
         contact.phone = req.body.phone
 
-        contact.save(function(err){
-            if(err){
+        contact
+            .save()
+            .then((data)=> {
                 res.json({
-                    status : "error",
-                    message : err
+                    Status : "Success",
+                    message : "Update Contact! ",
+                    Contact : data
                 })
-            }
-            res.json({
-                message : "Contact Info Update!",
-                data : contact
             })
-        }) 
+            .catch((err) => {
+                res.status(500).send({
+                    message : err.message || "Internal server error"
+                })
+            })
     })
 }
 
