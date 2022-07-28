@@ -39,12 +39,13 @@ const user_schema = new Schema({
             message : "Email is not Valid"
         }
     },
-    data_joined : {
-        type : Data,
+    date_joined : {
+        type : Date,
         default : Date.now()
     }
 })
 
+//enkripsi password sebelum di save
 user_schema.pre("save", function (next){
     const user = this
     if(user.isModified("password")){
@@ -57,6 +58,20 @@ user_schema.pre("save", function (next){
             })
         })
     }else return next()
+})
+
+//enkripsi password sebelum di update 
+user_schema.pre("findOneAndUpdate", async function (next){  
+    try {
+        //_update menjelaskan jika data tersebut terupdate
+        if(this._update.password){
+            const hashed = await bcrypt.hash(this._update.password, bcrypt_round)
+            this._update.password = hashed
+        }
+        next();    
+    } catch (err) {
+        return next(err);    
+    }
 })
 
 user_schema.method.isPassMatch = function (pass,callback){

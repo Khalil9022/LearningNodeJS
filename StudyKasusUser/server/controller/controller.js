@@ -15,7 +15,7 @@ exports.create = (req,res) => {
     const user = new userdb({
         username : req.body.username,
         password : req.body.password,
-        name : req.body.name.body,
+        name : req.body.name,
         email : req.body.email
     })
 
@@ -64,10 +64,10 @@ exports.find = (req,res)=>{
 //update data user by parameter username
 exports.update = (req,res) => {
     try {
-        userdb.findOneAndUpdate({"username" : req.param.username}, req.body, {new : true})
+        userdb.findOneAndUpdate({"username" : req.params.username}, req.body, {new : true})
         .then((data) => {
             if(!data){
-                res.status(404).send({ message : "Cannot update user with username : " + req.param.username})
+                res.status(404).send({ message : "Cannot update user with username : " + req.params.username})
             }else { 
                 res.json({
                 message : "succes update data User",
@@ -82,16 +82,15 @@ exports.update = (req,res) => {
 
 //delete data user by spesified username in request 
 exports.delete = (req,res) => {
-    const userName = req.param.username
+    const userName = req.params.username
 
     userdb.findOneAndDelete({"username" : userName})
     .then((data) => {
             if(!data){
-                res.status(404).send({ message : "Cannot update user with username : " + req.param.username})
+                res.status(404).send({ message : "Cannot delete user with username : " + userName})
             }else { 
                 res.json({
-                message : "succes update data User",
-                Data : data
+                message : "succes delete data User",
                 })
             }
     })
